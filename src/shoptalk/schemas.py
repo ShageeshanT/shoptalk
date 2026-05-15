@@ -119,3 +119,9 @@ class ConversationMessage(BaseModel):
 class ConversationMessageOut(ConversationMessage):
     id: UUID = Field(default_factory=uuid4)
     created_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class ReplyDraft(BaseModel):
+    analysis: MessageAnalysis
+    suggested_reply: str
+    requires_human_approval: bool = True
