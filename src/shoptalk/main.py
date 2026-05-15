@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from shoptalk.analyzer import analyze_message
+from shoptalk.reply import build_suggested_reply
 from shoptalk.routes_businesses import router as businesses_router
 from shoptalk.routes_customers import router as customers_router
 from shoptalk.routes_dashboard import router as dashboard_router
@@ -37,3 +38,9 @@ def health() -> dict[str, str]:
 @app.post("/analyze", response_model=MessageAnalysis)
 def analyze(payload: MessageAnalyzeRequest) -> MessageAnalysis:
     return analyze_message(payload)
+
+
+@app.post("/draft-reply", response_model=ReplyDraft)
+def draft_reply(request: AnalyzeMessageRequest) -> ReplyDraft:
+    analysis = analyze_message(request)
+    return ReplyDraft(analysis=analysis, suggested_reply=build_suggested_reply(analysis))
