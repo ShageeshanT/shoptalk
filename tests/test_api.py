@@ -52,3 +52,11 @@ def test_missing_business_rejected_for_customer() -> None:
         json={"business_id": "00000000-0000-0000-0000-000000000000", "name": "Ghost"},
     )
     assert response.status_code == 404
+
+
+def test_draft_reply_endpoint_returns_human_approved_reply():
+    response = client.post("/draft-reply", json={"message": "Can I order two cupcakes today?"})
+    assert response.status_code == 200
+    body = response.json()
+    assert body["requires_human_approval"] is True
+    assert body["suggested_reply"]
