@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from shoptalk.analyzer import analyze_message
 from shoptalk.reply import build_suggested_reply
 from shoptalk.metrics import business_metrics
+from shoptalk.demo import seed_demo_data
 from shoptalk.routes_businesses import router as businesses_router
 from shoptalk.routes_customers import router as customers_router
 from shoptalk.routes_dashboard import router as dashboard_router
