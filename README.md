@@ -298,3 +298,22 @@ Early planning and foundation stage.
 ## License
 
 MIT
+
+
+## Current MVP API
+
+ShopTalk now includes endpoints for:
+
+- message analysis and reply drafting
+- business and customer setup
+- order tracking
+- follow-up tracking
+- seller tasks
+- dashboard metrics
+- demo seed data
+
+Run locally with:
+
+```bash
+uvicorn shoptalk.main:app --reload
+```
