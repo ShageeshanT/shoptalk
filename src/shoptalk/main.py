@@ -8,6 +8,7 @@ from shoptalk.routes_dashboard import router as dashboard_router
 from shoptalk.routes_followups import router as followups_router
 from shoptalk.routes_messages import router as messages_router
 from shoptalk.routes_orders import router as orders_router
+from shoptalk.routes_tasks import router as tasks_router
 from shoptalk.schemas import MessageAnalysis, MessageAnalyzeRequest
 from shoptalk.seeds import seed_demo_data
 
@@ -19,6 +20,7 @@ app = FastAPI(
 app.include_router(businesses_router)
 app.include_router(customers_router)
 app.include_router(orders_router)
+app.include_router(tasks_router)
 app.include_router(followups_router)
 app.include_router(messages_router)
 app.include_router(dashboard_router)
