@@ -104,3 +104,18 @@ class FollowUpCreate(BaseModel):
 class FollowUp(FollowUpCreate):
     id: UUID = Field(default_factory=uuid4)
     created_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class ConversationMessage(BaseModel):
+    business_id: UUID
+    customer_id: UUID | None = None
+    channel: str = "whatsapp"
+    sender: Literal["customer", "seller", "assistant"] = "customer"
+    text: str = Field(..., min_length=1)
+    external_message_id: str | None = None
+    received_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class ConversationMessageOut(ConversationMessage):
+    id: UUID = Field(default_factory=uuid4)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
