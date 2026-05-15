@@ -1,5 +1,6 @@
 import re
 
+from shoptalk.reply_builder import apply_tone
 from shoptalk.schemas import MessageAnalysis, MessageAnalyzeRequest, OrderDetails
 
 
@@ -87,6 +88,6 @@ def analyze_message(payload: MessageAnalyzeRequest) -> MessageAnalysis:
         order_details=details,
         follow_up_needed=follow_up_needed,
         follow_up_reason=follow_up_reason,
-        suggested_reply=suggested_reply,
+        suggested_reply=apply_tone(suggested_reply, payload.tone),
         confidence=0.62,
     )
