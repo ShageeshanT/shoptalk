@@ -41,8 +41,8 @@ def analyze_message(payload: MessageAnalyzeRequest) -> MessageAnalysis:
     text = payload.text.strip()
     lowered = text.lower()
     intent = _detect_intent(text)
-    urgency = "high" if any(word in lowered for word in ["urgent", "today", "asap", "bad review"]) else "normal"
-    sentiment = "negative" if intent == "complaint" else "neutral"
+    urgency = "high" if any(word in lowered for word in ["urgent", "today", "asap", "bad review", "now"]) else "normal"
+    sentiment = "negative" if intent == "complaint" else "positive" if any(word in lowered for word in ["thanks", "love", "great", "perfect"]) else "neutral"
 
     details = OrderDetails(quantity=_detect_quantity(text))
 
