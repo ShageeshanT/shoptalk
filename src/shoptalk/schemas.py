@@ -125,3 +125,16 @@ class ReplyDraft(BaseModel):
     analysis: MessageAnalysis
     suggested_reply: str
     requires_human_approval: bool = True
+
+
+class SellerTask(BaseModel):
+    business_id: UUID
+    title: str = Field(..., min_length=2)
+    source: str = "manual"
+    priority: Literal["low", "normal", "high"] = "normal"
+    done: bool = False
+
+
+class SellerTaskOut(SellerTask):
+    id: UUID = Field(default_factory=uuid4)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
