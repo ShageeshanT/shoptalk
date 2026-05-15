@@ -1,4 +1,4 @@
-from shoptalk.schemas import Business, ConversationMessageOut, Customer, FollowUp, Order
+from shoptalk.schemas import Business, ConversationMessageOut, Customer, FollowUp, Order, SellerTaskOut
 from shoptalk.storage import InMemoryRepository
 
 
@@ -9,6 +9,7 @@ class AppState:
         self.orders: InMemoryRepository[Order] = InMemoryRepository()
         self.follow_ups: InMemoryRepository[FollowUp] = InMemoryRepository()
         self.messages: InMemoryRepository[ConversationMessageOut] = InMemoryRepository()
+        self.tasks: InMemoryRepository[SellerTaskOut] = InMemoryRepository()
 
 
 state = AppState()
