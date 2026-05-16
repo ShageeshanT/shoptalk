@@ -181,3 +181,8 @@ class ConversationSummary(BaseModel):
 class InboxItem(BaseModel):
     customer_id: UUID
     signal: CustomerSignal
+
+
+class CatalogMatchRequest(BaseModel):
+    message: str = Field(..., min_length=1)
+    catalog: list[dict]

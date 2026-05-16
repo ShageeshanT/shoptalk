@@ -132,3 +132,20 @@ def test_order_payment_request_draft_includes_amount() -> None:
     body = payment_response.json()
     assert body["required"] is True
     assert "2,500" in body["message"]
+
+
+def test_catalog_match_endpoint_returns_best_items() -> None:
+    response = client.post(
+        "/catalog/match",
+        json={
+            "message": "Do you have chocolate cake?",
+            "catalog": [
+                {"name": "Chocolate Cake", "price": 3500, "tags": ["cake", "birthday"]},
+                {"name": "Vanilla Cupcakes", "price": 1200, "tags": ["cupcake"]},
+            ],
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body[0]["item"]["name"] == "Chocolate Cake"

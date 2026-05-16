@@ -5,6 +5,7 @@ from shoptalk.reply import build_suggested_reply
 from shoptalk.metrics import business_metrics
 from shoptalk.demo import seed_demo_data
 from shoptalk.routes_businesses import router as businesses_router
+from shoptalk.routes_catalog import router as catalog_router
 from shoptalk.routes_customers import router as customers_router
 from shoptalk.routes_conversations import router as conversations_router
 from shoptalk.routes_dashboard import router as dashboard_router
@@ -21,6 +22,7 @@ app = FastAPI(
     version="0.1.0",
 )
 app.include_router(businesses_router)
+app.include_router(catalog_router)
 app.include_router(customers_router)
 app.include_router(conversations_router)
 app.include_router(orders_router)
