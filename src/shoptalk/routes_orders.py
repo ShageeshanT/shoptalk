@@ -2,7 +2,8 @@ from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, status
 
-from shoptalk.schemas import Order, OrderCreate
+from shoptalk.orders import is_active_order, seller_next_step
+from shoptalk.schemas import Order, OrderAction, OrderCreate
 from shoptalk.state import state
 
 router = APIRouter(prefix="/orders", tags=["orders"])
@@ -37,3 +38,16 @@ def get_order(order_id: UUID) -> Order:
     if order is None:
         raise HTTPException(status_code=404, detail="Order not found")
     return order
+
+
+@router.get("/{order_id}/next-action", response_model=OrderAction)
+def get_order_next_action(order_id: UUID) -> OrderAction:
+    order = state.orders.get(order_id)
+    if order is None:
+        raise HTTPException(status_code=404, detail="Order not found")
+    return OrderAction(
+        order_id=order.id,
+        status=order.status,
+        active=is_active_order(order),
+        next_step=seller_next_step(order),
+    )

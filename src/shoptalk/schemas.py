@@ -92,6 +92,13 @@ class Order(OrderCreate):
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 
+class OrderAction(BaseModel):
+    order_id: UUID
+    status: OrderStatus
+    active: bool
+    next_step: str
+
+
 class FollowUpCreate(BaseModel):
     business_id: UUID
     customer_id: UUID | None = None

@@ -93,3 +93,20 @@ def test_conversation_summary_returns_latest_signal() -> None:
     assert body["customer_messages"] == 1
     assert body["signal"]["intent"] == "new_order"
     assert body["signal"]["needs_reply"] is True
+
+
+def test_order_next_action_explains_seller_step() -> None:
+    business_response = client.post("/businesses", json={"name": "Action Bakery"})
+    business_id = business_response.json()["id"]
+    order_response = client.post(
+        "/orders",
+        json={"business_id": business_id, "title": "Ribbon cake", "status": "payment_pending"},
+    )
+    order_id = order_response.json()["id"]
+
+    action_response = client.get(f"/orders/{order_id}/next-action")
+
+    assert action_response.status_code == 200
+    body = action_response.json()
+    assert body["active"] is True
+    assert "payment" in body["next_step"].lower()
