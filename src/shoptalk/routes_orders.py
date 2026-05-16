@@ -3,7 +3,8 @@ from uuid import UUID
 from fastapi import APIRouter, HTTPException, status
 
 from shoptalk.orders import is_active_order, seller_next_step
-from shoptalk.schemas import Order, OrderAction, OrderCreate
+from shoptalk.payments import build_payment_note, payment_required
+from shoptalk.schemas import Order, OrderAction, OrderCreate, PaymentRequestDraft
 from shoptalk.state import state
 
 router = APIRouter(prefix="/orders", tags=["orders"])
@@ -50,4 +51,16 @@ def get_order_next_action(order_id: UUID) -> OrderAction:
         status=order.status,
         active=is_active_order(order),
         next_step=seller_next_step(order),
+    )
+
+
+@router.get("/{order_id}/payment-request", response_model=PaymentRequestDraft)
+def get_payment_request(order_id: UUID) -> PaymentRequestDraft:
+    order = state.orders.get(order_id)
+    if order is None:
+        raise HTTPException(status_code=404, detail="Order not found")
+    return PaymentRequestDraft(
+        order_id=order.id,
+        required=payment_required(order),
+        message=build_payment_note(order),
     )

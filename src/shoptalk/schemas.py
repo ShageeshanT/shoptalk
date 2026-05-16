@@ -99,6 +99,12 @@ class OrderAction(BaseModel):
     next_step: str
 
 
+class PaymentRequestDraft(BaseModel):
+    order_id: UUID
+    required: bool
+    message: str
+
+
 class FollowUpCreate(BaseModel):
     business_id: UUID
     customer_id: UUID | None = None

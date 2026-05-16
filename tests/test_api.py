@@ -110,3 +110,25 @@ def test_order_next_action_explains_seller_step() -> None:
     body = action_response.json()
     assert body["active"] is True
     assert "payment" in body["next_step"].lower()
+
+
+def test_order_payment_request_draft_includes_amount() -> None:
+    business_response = client.post("/businesses", json={"name": "Pay Bakery"})
+    business_id = business_response.json()["id"]
+    order_response = client.post(
+        "/orders",
+        json={
+            "business_id": business_id,
+            "title": "Cupcake box",
+            "total_amount": 2500,
+            "status": "payment_pending",
+        },
+    )
+    order_id = order_response.json()["id"]
+
+    payment_response = client.get(f"/orders/{order_id}/payment-request")
+
+    assert payment_response.status_code == 200
+    body = payment_response.json()
+    assert body["required"] is True
+    assert "2,500" in body["message"]
