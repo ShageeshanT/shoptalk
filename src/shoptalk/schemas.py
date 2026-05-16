@@ -176,3 +176,8 @@ class ConversationSummary(BaseModel):
     seller_messages: int
     latest_message: ConversationMessageOut | None = None
     signal: CustomerSignal | None = None
+
+
+class InboxItem(BaseModel):
+    customer_id: UUID
+    signal: CustomerSignal

@@ -3,7 +3,8 @@ from uuid import UUID
 from fastapi import APIRouter, HTTPException
 
 from shoptalk.customer_signals import build_customer_signal
-from shoptalk.schemas import ConversationMessageOut, ConversationSummary
+from shoptalk.inbox import build_customer_inbox_item
+from shoptalk.schemas import ConversationMessageOut, ConversationSummary, InboxItem
 from shoptalk.state import state
 
 router = APIRouter(prefix="/conversations", tags=["conversations"])
@@ -37,3 +38,14 @@ def conversation_summary(business_id: UUID, customer_id: UUID | None = None) -> 
         latest_message=latest,
         signal=build_customer_signal(messages),
     )
+
+
+@router.get("/inbox", response_model=list[InboxItem])
+def conversation_inbox(business_id: UUID) -> list[InboxItem]:
+    messages = _conversation_messages(business_id)
+    items: list[InboxItem] = []
+    for customer in state.customers.list_for_business(business_id):
+        signal = build_customer_inbox_item(customer.id, messages)
+        if signal is not None:
+            items.append(InboxItem(customer_id=customer.id, signal=signal))
+    return sorted(items, key=lambda item: item.signal.needs_reply, reverse=True)
