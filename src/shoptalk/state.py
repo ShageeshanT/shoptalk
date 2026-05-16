@@ -1,3 +1,4 @@
+from shoptalk.approval import ApprovalDraft
 from shoptalk.schemas import Business, ConversationMessageOut, Customer, FollowUp, Order, SellerTaskOut
 from shoptalk.storage import InMemoryRepository
 
@@ -10,6 +11,7 @@ class AppState:
         self.follow_ups: InMemoryRepository[FollowUp] = InMemoryRepository()
         self.messages: InMemoryRepository[ConversationMessageOut] = InMemoryRepository()
         self.tasks: InMemoryRepository[SellerTaskOut] = InMemoryRepository()
+        self.approvals: InMemoryRepository[ApprovalDraft] = InMemoryRepository()
 
 
 state = AppState()
