@@ -6,12 +6,13 @@ from shoptalk.metrics import business_metrics
 from shoptalk.demo import seed_demo_data
 from shoptalk.routes_businesses import router as businesses_router
 from shoptalk.routes_customers import router as customers_router
+from shoptalk.routes_conversations import router as conversations_router
 from shoptalk.routes_dashboard import router as dashboard_router
 from shoptalk.routes_followups import router as followups_router
 from shoptalk.routes_messages import router as messages_router
 from shoptalk.routes_orders import router as orders_router
 from shoptalk.routes_tasks import router as tasks_router
-from shoptalk.schemas import MessageAnalysis, MessageAnalyzeRequest
+from shoptalk.schemas import MessageAnalysis, MessageAnalyzeRequest, ReplyDraft
 from shoptalk.seeds import seed_demo_data
 
 app = FastAPI(
@@ -21,6 +22,7 @@ app = FastAPI(
 )
 app.include_router(businesses_router)
 app.include_router(customers_router)
+app.include_router(conversations_router)
 app.include_router(orders_router)
 app.include_router(tasks_router)
 app.include_router(followups_router)
@@ -45,7 +47,7 @@ def analyze(payload: MessageAnalyzeRequest) -> MessageAnalysis:
 
 
 @app.post("/draft-reply", response_model=ReplyDraft)
-def draft_reply(request: AnalyzeMessageRequest) -> ReplyDraft:
+def draft_reply(request: MessageAnalyzeRequest) -> ReplyDraft:
     analysis = analyze_message(request)
     return ReplyDraft(analysis=analysis, suggested_reply=build_suggested_reply(analysis))
 

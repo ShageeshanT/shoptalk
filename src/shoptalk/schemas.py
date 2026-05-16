@@ -138,3 +138,23 @@ class SellerTask(BaseModel):
 class SellerTaskOut(SellerTask):
     id: UUID = Field(default_factory=uuid4)
     created_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class CustomerSignal(BaseModel):
+    customer_id: UUID | None = None
+    latest_message: str
+    intent: Intent
+    urgency: Urgency
+    sentiment: Sentiment
+    needs_reply: bool
+    suggested_reply: str
+
+
+class ConversationSummary(BaseModel):
+    business_id: UUID
+    customer_id: UUID | None = None
+    messages: int
+    customer_messages: int
+    seller_messages: int
+    latest_message: ConversationMessageOut | None = None
+    signal: CustomerSignal | None = None

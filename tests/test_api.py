@@ -55,8 +55,41 @@ def test_missing_business_rejected_for_customer() -> None:
 
 
 def test_draft_reply_endpoint_returns_human_approved_reply():
-    response = client.post("/draft-reply", json={"message": "Can I order two cupcakes today?"})
+    response = client.post("/draft-reply", json={"text": "Can I order two cupcakes today?"})
     assert response.status_code == 200
     body = response.json()
     assert body["requires_human_approval"] is True
     assert body["suggested_reply"]
+
+
+def test_conversation_summary_returns_latest_signal() -> None:
+    business_response = client.post("/businesses", json={"name": "Signal Bakery"})
+    business_id = business_response.json()["id"]
+    customer_response = client.post(
+        "/customers",
+        json={"business_id": business_id, "name": "Nadi", "channel": "whatsapp"},
+    )
+    customer_id = customer_response.json()["id"]
+
+    message_response = client.post(
+        "/messages",
+        json={
+            "business_id": business_id,
+            "customer_id": customer_id,
+            "sender": "customer",
+            "text": "Can I order two cakes today?",
+        },
+    )
+    assert message_response.status_code == 201
+
+    summary_response = client.get(
+        "/conversations/summary",
+        params={"business_id": business_id, "customer_id": customer_id},
+    )
+
+    assert summary_response.status_code == 200
+    body = summary_response.json()
+    assert body["messages"] == 1
+    assert body["customer_messages"] == 1
+    assert body["signal"]["intent"] == "new_order"
+    assert body["signal"]["needs_reply"] is True
