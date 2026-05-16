@@ -2,7 +2,8 @@ from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, status
 
-from shoptalk.schemas import FollowUp, FollowUpCreate
+from shoptalk.followups import follow_up_priority
+from shoptalk.schemas import FollowUp, FollowUpCreate, FollowUpQueueItem
 from shoptalk.state import state
 
 router = APIRouter(prefix="/follow-ups", tags=["follow-ups"])
@@ -31,6 +32,16 @@ def list_follow_ups(business_id: UUID | None = None) -> list[FollowUp]:
     if state.businesses.get(business_id) is None:
         raise HTTPException(status_code=404, detail="Business not found")
     return state.follow_ups.list_for_business(business_id)
+
+
+@router.get("/queue", response_model=list[FollowUpQueueItem])
+def follow_up_queue(business_id: UUID | None = None) -> list[FollowUpQueueItem]:
+    follow_ups = list_follow_ups(business_id)
+    queue = [
+        FollowUpQueueItem(follow_up=follow_up, priority=follow_up_priority(follow_up))
+        for follow_up in follow_ups
+    ]
+    return sorted(queue, key=lambda item: item.priority, reverse=True)
 
 
 @router.get("/{follow_up_id}", response_model=FollowUp)

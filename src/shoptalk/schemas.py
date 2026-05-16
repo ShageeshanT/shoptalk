@@ -119,6 +119,11 @@ class FollowUp(FollowUpCreate):
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 
+class FollowUpQueueItem(BaseModel):
+    follow_up: FollowUp
+    priority: int
+
+
 class ConversationMessage(BaseModel):
     business_id: UUID
     customer_id: UUID | None = None
