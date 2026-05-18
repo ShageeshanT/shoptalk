@@ -18,6 +18,7 @@ from shoptalk.routes_messages import router as messages_router
 from shoptalk.routes_orders import router as orders_router
 from shoptalk.routes_profiles import router as profiles_router
 from shoptalk.routes_sales import router as sales_router
+from shoptalk.routes_settings import router as settings_router
 from shoptalk.routes_tasks import router as tasks_router
 from shoptalk.routes_threads import router as threads_router
 from shoptalk.schemas import MessageAnalysis, MessageAnalyzeRequest, ReplyDraft
@@ -39,6 +40,7 @@ app.include_router(conversations_router)
 app.include_router(orders_router)
 app.include_router(profiles_router)
 app.include_router(sales_router)
+app.include_router(settings_router)
 app.include_router(tasks_router)
 app.include_router(followups_router)
 app.include_router(messages_router)

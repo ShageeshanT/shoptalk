@@ -275,3 +275,19 @@ def test_daily_brief_suggests_actions() -> None:
     assert body["open_orders"] >= 1
     assert body["urgent_messages"] >= 1
     assert body["suggested_actions"]
+
+
+def test_business_settings_can_be_updated() -> None:
+    business_response = client.post("/businesses", json={"name": "Settings Bakery"})
+    business_id = business_response.json()["id"]
+
+    response = client.patch(
+        f"/settings/businesses/{business_id}",
+        json={"tone": "friendly", "currency": "USD", "timezone": "Asia/Colombo"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["tone"] == "friendly"
+    assert body["currency"] == "USD"
+    assert body["timezone"] == "Asia/Colombo"
