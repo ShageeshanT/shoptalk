@@ -291,3 +291,17 @@ def test_business_settings_can_be_updated() -> None:
     assert body["tone"] == "friendly"
     assert body["currency"] == "USD"
     assert body["timezone"] == "Asia/Colombo"
+
+
+def test_message_search_filters_by_text() -> None:
+    business_response = client.post("/businesses", json={"name": "Search Bakery"})
+    business_id = business_response.json()["id"]
+    client.post("/messages", json={"business_id": business_id, "text": "Need eggless cupcakes"})
+    client.post("/messages", json={"business_id": business_id, "text": "Delivery tomorrow"})
+
+    response = client.get("/search/messages", params={"business_id": business_id, "q": "eggless"})
+
+    assert response.status_code == 200
+    messages = response.json()
+    assert len(messages) >= 1
+    assert all("eggless" in message["text"].lower() for message in messages)
