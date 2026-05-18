@@ -185,3 +185,24 @@ def test_thread_endpoint_returns_messages_in_order() -> None:
     assert len(body["messages"]) == 2
     assert body["messages"][0]["direction"] == "customer"
     assert body["messages"][1]["display_name"] == "ShopTalk"
+
+
+def test_catalog_items_can_be_created_and_listed() -> None:
+    business_response = client.post("/businesses", json={"name": "Catalog Bakery"})
+    business_id = business_response.json()["id"]
+
+    create_response = client.post(
+        "/catalog-items",
+        json={
+            "business_id": business_id,
+            "name": "Mini Brownie Box",
+            "price": 1800,
+            "tags": ["brownie", "box"],
+        },
+    )
+
+    assert create_response.status_code == 201
+    list_response = client.get("/catalog-items", params={"business_id": business_id})
+    assert list_response.status_code == 200
+    items = list_response.json()
+    assert any(item["name"] == "Mini Brownie Box" for item in items)
