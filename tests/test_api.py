@@ -246,3 +246,17 @@ def test_customer_profile_groups_related_records() -> None:
     assert body["customer"]["name"] == "Nishi"
     assert len(body["orders"]) >= 1
     assert len(body["messages"]) >= 1
+
+
+def test_sales_funnel_counts_order_statuses() -> None:
+    business_response = client.post("/businesses", json={"name": "Funnel Bakery"})
+    business_id = business_response.json()["id"]
+    client.post("/orders", json={"business_id": business_id, "title": "Cake", "status": "new_inquiry"})
+    client.post("/orders", json={"business_id": business_id, "title": "Brownies", "status": "paid"})
+
+    response = client.get("/sales/funnel")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["new_inquiries"] >= 1
+    assert body["paid"] >= 1
