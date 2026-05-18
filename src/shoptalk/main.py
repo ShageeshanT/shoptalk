@@ -9,6 +9,7 @@ from shoptalk.routes_businesses import router as businesses_router
 from shoptalk.routes_catalog import router as catalog_router
 from shoptalk.routes_catalog_items import router as catalog_items_router
 from shoptalk.routes_customers import router as customers_router
+from shoptalk.routes_checkout import router as checkout_router
 from shoptalk.routes_conversations import router as conversations_router
 from shoptalk.routes_dashboard import router as dashboard_router
 from shoptalk.routes_followups import router as followups_router
@@ -29,6 +30,7 @@ app.include_router(businesses_router)
 app.include_router(catalog_router)
 app.include_router(catalog_items_router)
 app.include_router(customers_router)
+app.include_router(checkout_router)
 app.include_router(conversations_router)
 app.include_router(orders_router)
 app.include_router(tasks_router)

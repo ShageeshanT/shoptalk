@@ -206,3 +206,20 @@ def test_catalog_items_can_be_created_and_listed() -> None:
     assert list_response.status_code == 200
     items = list_response.json()
     assert any(item["name"] == "Mini Brownie Box" for item in items)
+
+
+def test_checkout_draft_includes_order_total() -> None:
+    business_response = client.post("/businesses", json={"name": "Checkout Bakery", "currency": "LKR"})
+    business_id = business_response.json()["id"]
+    order_response = client.post(
+        "/orders",
+        json={"business_id": business_id, "title": "Birthday Cake", "total_amount": 5200},
+    )
+    order_id = order_response.json()["id"]
+
+    response = client.get(f"/checkout/orders/{order_id}/draft")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["currency"] == "LKR"
+    assert "5,200" in body["message"]
