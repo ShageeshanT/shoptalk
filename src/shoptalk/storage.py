@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 from collections.abc import Iterable
+from builtins import list as builtins_list
 from typing import Generic, TypeVar
 from uuid import UUID
 
@@ -26,7 +29,7 @@ class InMemoryRepository(Generic[ModelT]):
         return self._items.get(item_id)
 
     def list(self) -> list[ModelT]:
-        return list(self._items.values())
+        return builtins_list(self._items.values())
 
     def list_for_business(self, business_id: UUID) -> list[ModelT]:
         return [item for item in self._items.values() if getattr(item, "business_id", None) == business_id]

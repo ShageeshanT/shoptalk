@@ -1,9 +1,9 @@
 from uuid import UUID
 
 from shoptalk.schemas import CatalogItemCreate, CatalogItemRecord
-from shoptalk.storage import InMemoryStore
+from shoptalk.storage import InMemoryRepository
 
-catalog_items: InMemoryStore[CatalogItemRecord] = InMemoryStore()
+catalog_items: InMemoryRepository[CatalogItemRecord] = InMemoryRepository()
 
 
 def create_catalog_item(payload: CatalogItemCreate) -> CatalogItemRecord:
