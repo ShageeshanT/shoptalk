@@ -26,3 +26,9 @@ class FollowUpStatus(StrEnum):
     OPEN = "open"
     DONE = "done"
     CANCELLED = "cancelled"
+
+
+class MessageDirection(StrEnum):
+    CUSTOMER = "customer"
+    SELLER = "seller"
+    ASSISTANT = "assistant"

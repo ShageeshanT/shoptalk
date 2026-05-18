@@ -149,3 +149,39 @@ def test_catalog_match_endpoint_returns_best_items() -> None:
     assert response.status_code == 200
     body = response.json()
     assert body[0]["item"]["name"] == "Chocolate Cake"
+
+
+def test_thread_endpoint_returns_messages_in_order() -> None:
+    business_response = client.post("/businesses", json={"name": "Thread Bakery"})
+    business_id = business_response.json()["id"]
+    customer_response = client.post(
+        "/customers",
+        json={"business_id": business_id, "name": "Savi", "channel": "whatsapp"},
+    )
+    customer_id = customer_response.json()["id"]
+    client.post(
+        "/messages",
+        json={
+            "business_id": business_id,
+            "customer_id": customer_id,
+            "sender": "customer",
+            "text": "Hi, do you have cupcakes?",
+        },
+    )
+    client.post(
+        "/messages",
+        json={
+            "business_id": business_id,
+            "customer_id": customer_id,
+            "sender": "assistant",
+            "text": "Yes, what quantity do you need?",
+        },
+    )
+
+    response = client.get("/threads", params={"business_id": business_id, "customer_id": customer_id})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert len(body["messages"]) == 2
+    assert body["messages"][0]["direction"] == "customer"
+    assert body["messages"][1]["display_name"] == "ShopTalk"

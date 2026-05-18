@@ -14,6 +14,7 @@ from shoptalk.routes_followups import router as followups_router
 from shoptalk.routes_messages import router as messages_router
 from shoptalk.routes_orders import router as orders_router
 from shoptalk.routes_tasks import router as tasks_router
+from shoptalk.routes_threads import router as threads_router
 from shoptalk.schemas import MessageAnalysis, MessageAnalyzeRequest, ReplyDraft
 from shoptalk.seeds import seed_demo_data
 
@@ -32,6 +33,7 @@ app.include_router(tasks_router)
 app.include_router(followups_router)
 app.include_router(messages_router)
 app.include_router(dashboard_router)
+app.include_router(threads_router)
 
 
 @app.post("/demo/seed")

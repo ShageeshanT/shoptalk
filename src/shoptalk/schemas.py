@@ -4,7 +4,7 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
-from shoptalk.enums import BusinessType, FollowUpStatus, OrderStatus
+from shoptalk.enums import BusinessType, FollowUpStatus, MessageDirection, OrderStatus
 
 
 Intent = Literal[
@@ -128,7 +128,7 @@ class ConversationMessage(BaseModel):
     business_id: UUID
     customer_id: UUID | None = None
     channel: str = "whatsapp"
-    sender: Literal["customer", "seller", "assistant"] = "customer"
+    sender: MessageDirection = MessageDirection.CUSTOMER
     text: str = Field(..., min_length=1)
     external_message_id: str | None = None
     received_at: datetime = Field(default_factory=datetime.utcnow)
@@ -186,3 +186,75 @@ class InboxItem(BaseModel):
 class CatalogMatchRequest(BaseModel):
     message: str = Field(..., min_length=1)
     catalog: list[dict]
+
+
+class MessageThreadItem(BaseModel):
+    message: ConversationMessageOut
+    direction: MessageDirection
+    display_name: str
+
+
+class MessageThread(BaseModel):
+    business_id: UUID
+    customer_id: UUID | None = None
+    messages: list[MessageThreadItem]
+
+
+class MessageSendDraft(BaseModel):
+    business_id: UUID
+    customer_id: UUID | None = None
+    channel: str = "whatsapp"
+    text: str = Field(..., min_length=1)
+    requires_human_approval: bool = True
+
+
+class CustomerProfile(BaseModel):
+    customer: Customer
+    orders: list[Order]
+    follow_ups: list[FollowUp]
+    messages: list[ConversationMessageOut]
+
+
+class CatalogItemCreate(BaseModel):
+    business_id: UUID
+    name: str = Field(..., min_length=1)
+    price: float | None = Field(default=None, ge=0)
+    tags: list[str] = Field(default_factory=list)
+    available: bool = True
+
+
+class CatalogItemRecord(CatalogItemCreate):
+    id: UUID = Field(default_factory=uuid4)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class CheckoutDraft(BaseModel):
+    order_id: UUID
+    amount: float | None = None
+    currency: str = "LKR"
+    payment_label: str = "manual_transfer"
+    message: str
+
+
+class SalesFunnel(BaseModel):
+    new_inquiries: int
+    payment_pending: int
+    paid: int
+    preparing: int
+    ready: int
+    delivered: int
+    cancelled: int
+
+
+class DailyBrief(BaseModel):
+    business_id: UUID | None = None
+    open_orders: int
+    pending_follow_ups: int
+    urgent_messages: int
+    suggested_actions: list[str]
+
+
+class BusinessSettingsUpdate(BaseModel):
+    tone: str | None = None
+    currency: str | None = None
+    timezone: str | None = None
