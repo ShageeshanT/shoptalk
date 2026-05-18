@@ -260,3 +260,18 @@ def test_sales_funnel_counts_order_statuses() -> None:
     body = response.json()
     assert body["new_inquiries"] >= 1
     assert body["paid"] >= 1
+
+
+def test_daily_brief_suggests_actions() -> None:
+    business_response = client.post("/businesses", json={"name": "Brief Bakery"})
+    business_id = business_response.json()["id"]
+    client.post("/orders", json={"business_id": business_id, "title": "Cake"})
+    client.post("/messages", json={"business_id": business_id, "text": "urgent delivery update please"})
+
+    response = client.get("/briefing/daily", params={"business_id": business_id})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["open_orders"] >= 1
+    assert body["urgent_messages"] >= 1
+    assert body["suggested_actions"]
