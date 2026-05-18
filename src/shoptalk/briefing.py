@@ -7,7 +7,7 @@ from shoptalk.state import state
 
 def daily_brief(business_id: UUID | None = None) -> DailyBrief:
     orders = state.orders.list()
-    follow_ups = state.followups.list()
+    follow_ups = state.follow_ups.list()
     messages = state.messages.list()
     if business_id is not None:
         orders = [order for order in orders if order.business_id == business_id]

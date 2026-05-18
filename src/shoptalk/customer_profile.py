@@ -10,7 +10,7 @@ def build_customer_profile(customer_id: UUID) -> CustomerProfile | None:
         return None
 
     orders = [order for order in state.orders.list() if order.customer_id == customer_id]
-    follow_ups = [follow_up for follow_up in state.followups.list() if follow_up.customer_id == customer_id]
+    follow_ups = [follow_up for follow_up in state.follow_ups.list() if follow_up.customer_id == customer_id]
     messages = [message for message in state.messages.list() if message.customer_id == customer_id]
 
     return CustomerProfile(

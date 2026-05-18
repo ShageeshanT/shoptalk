@@ -1,6 +1,8 @@
 import re
 
 from shoptalk.reply_builder import apply_tone
+import re
+
 from shoptalk.schemas import MessageAnalysis, MessageAnalyzeRequest, OrderDetails
 
 
@@ -18,14 +20,16 @@ def _detect_quantity(text: str) -> int | None:
 
 def _detect_intent(text: str) -> str:
     lowered = text.lower()
-    if any(word in lowered for word in ["refund", "angry", "bad review", "complain", "wrong", "late"]):
+    order_markers = ["order", "i want", "can i get", "can i have", "book", "need"]
+    complaint_markers = ["refund", "angry", "bad review", "complain", "wrong", "late"]
+    if any(re.search(rf"\b{re.escape(word)}\b", lowered) for word in complaint_markers):
         return "complaint"
+    if any(re.search(rf"\b{re.escape(word)}\b", lowered) for word in order_markers):
+        return "new_order"
     if any(word in lowered for word in ["pay", "payment", "paid", "deposit", "bank transfer"]):
         return "payment_question"
     if any(word in lowered for word in ["deliver", "delivery", "pickup", "where is my order"]):
         return "delivery_question"
-    if any(word in lowered for word in ["order", "i want", "can i get", "can i have", "book"]):
-        return "new_order"
     if any(word in lowered for word in ["available", "price", "how much", "do you have"]):
         return "product_inquiry"
     return "general"
