@@ -223,3 +223,26 @@ def test_checkout_draft_includes_order_total() -> None:
     body = response.json()
     assert body["currency"] == "LKR"
     assert "5,200" in body["message"]
+
+
+def test_customer_profile_groups_related_records() -> None:
+    business_response = client.post("/businesses", json={"name": "Profile Bakery"})
+    business_id = business_response.json()["id"]
+    customer_response = client.post(
+        "/customers",
+        json={"business_id": business_id, "name": "Nishi", "channel": "whatsapp"},
+    )
+    customer_id = customer_response.json()["id"]
+    client.post("/orders", json={"business_id": business_id, "customer_id": customer_id, "title": "Cake"})
+    client.post(
+        "/messages",
+        json={"business_id": business_id, "customer_id": customer_id, "text": "Need a cake"},
+    )
+
+    response = client.get(f"/profiles/customers/{customer_id}")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["customer"]["name"] == "Nishi"
+    assert len(body["orders"]) >= 1
+    assert len(body["messages"]) >= 1
