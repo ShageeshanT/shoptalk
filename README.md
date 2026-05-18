@@ -317,3 +317,7 @@ Run locally with:
 ```bash
 uvicorn shoptalk.main:app --reload
 ```
+
+## API notes
+
+See `docs/API_OVERVIEW.md` for the current endpoint map and the main seller workflow.
