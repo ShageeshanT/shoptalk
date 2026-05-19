@@ -146,6 +146,11 @@ class ConversationMessageOut(ConversationMessage):
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 
+class MessageTag(BaseModel):
+    message_id: UUID
+    tags: list[str]
+
+
 class ReplyDraft(BaseModel):
     analysis: MessageAnalysis
     suggested_reply: str
