@@ -14,6 +14,7 @@ from shoptalk.routes_checkout import router as checkout_router
 from shoptalk.routes_conversations import router as conversations_router
 from shoptalk.routes_dashboard import router as dashboard_router
 from shoptalk.routes_followups import router as followups_router
+from shoptalk.routes_kanban import router as kanban_router
 from shoptalk.routes_messages import router as messages_router
 from shoptalk.routes_orders import router as orders_router
 from shoptalk.routes_profiles import router as profiles_router
@@ -38,6 +39,7 @@ app.include_router(catalog_items_router)
 app.include_router(customers_router)
 app.include_router(checkout_router)
 app.include_router(conversations_router)
+app.include_router(kanban_router)
 app.include_router(orders_router)
 app.include_router(profiles_router)
 app.include_router(sales_router)
