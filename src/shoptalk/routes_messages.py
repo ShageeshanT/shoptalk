@@ -2,7 +2,8 @@ from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, status
 
-from shoptalk.schemas import ConversationMessage, ConversationMessageOut
+from shoptalk.message_tagging import tag_messages
+from shoptalk.schemas import ConversationMessage, ConversationMessageOut, MessageTag
 from shoptalk.state import state
 
 router = APIRouter(prefix="/messages", tags=["messages"])
@@ -27,3 +28,10 @@ def list_messages(business_id: UUID | None = None, customer_id: UUID | None = No
     if customer_id is not None:
         messages = [message for message in messages if message.customer_id == customer_id]
     return messages
+
+
+@router.get("/tags", response_model=list[MessageTag])
+def list_message_tags(business_id: UUID | None = None) -> list[MessageTag]:
+    if business_id is not None and state.businesses.get(business_id) is None:
+        raise HTTPException(status_code=404, detail="Business not found")
+    return tag_messages(state.messages.list(), business_id=business_id)
