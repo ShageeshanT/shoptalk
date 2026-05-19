@@ -246,6 +246,28 @@ class SalesFunnel(BaseModel):
     cancelled: int
 
 
+class KanbanOrderCard(BaseModel):
+    order_id: UUID
+    title: str
+    customer_id: UUID | None = None
+    total_amount: float | None = None
+    delivery_date: str | None = None
+
+
+class KanbanColumn(BaseModel):
+    status: OrderStatus
+    title: str
+    count: int
+    orders: list[KanbanOrderCard]
+
+
+class KanbanBoard(BaseModel):
+    business_id: UUID | None = None
+    columns: list[KanbanColumn]
+    total_orders: int
+    hidden_done_orders: int = 0
+
+
 class DailyBrief(BaseModel):
     business_id: UUID | None = None
     open_orders: int
