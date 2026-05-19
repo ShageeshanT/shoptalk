@@ -313,6 +313,17 @@ class DailyActionPlan(BaseModel):
     total_actions: int
 
 
+class HealthCheckItem(BaseModel):
+    name: str
+    ok: bool
+    detail: str
+
+
+class HealthCheck(BaseModel):
+    status: Literal["ok", "degraded"]
+    checks: list[HealthCheckItem]
+
+
 class BusinessSettingsUpdate(BaseModel):
     tone: str | None = None
     currency: str | None = None
