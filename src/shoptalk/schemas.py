@@ -295,6 +295,19 @@ class DailyBrief(BaseModel):
     suggested_actions: list[str]
 
 
+class DailyActionItem(BaseModel):
+    title: str
+    priority: Literal["low", "normal", "high"]
+    reason: str
+
+
+class DailyActionPlan(BaseModel):
+    business_id: UUID | None = None
+    generated_from: str
+    actions: list[DailyActionItem]
+    total_actions: int
+
+
 class BusinessSettingsUpdate(BaseModel):
     tone: str | None = None
     currency: str | None = None
