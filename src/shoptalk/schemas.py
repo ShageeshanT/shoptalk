@@ -175,6 +175,18 @@ class CustomerSignal(BaseModel):
     suggested_reply: str
 
 
+class CustomerInsight(BaseModel):
+    customer_id: UUID
+    total_orders: int
+    active_orders: int
+    delivered_orders: int
+    cancelled_orders: int
+    total_spend: float
+    inbound_messages: int
+    pending_follow_ups: int
+    latest_message_at: datetime | None = None
+
+
 class ConversationSummary(BaseModel):
     business_id: UUID
     customer_id: UUID | None = None
