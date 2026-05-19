@@ -105,6 +105,13 @@ class PaymentRequestDraft(BaseModel):
     message: str
 
 
+class OrderRisk(BaseModel):
+    order_id: UUID
+    level: Literal["low", "medium", "high"]
+    score: int = Field(..., ge=0, le=100)
+    flags: list[str]
+
+
 class FollowUpCreate(BaseModel):
     business_id: UUID
     customer_id: UUID | None = None
