@@ -4,6 +4,7 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
+from shoptalk.date_utils import utc_now
 from shoptalk.enums import BusinessType, FollowUpStatus, MessageDirection, OrderStatus
 
 
@@ -59,7 +60,7 @@ class BusinessCreate(BaseModel):
 
 class Business(BusinessCreate):
     id: UUID = Field(default_factory=uuid4)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=utc_now)
 
 
 class CustomerCreate(BaseModel):
@@ -73,7 +74,7 @@ class CustomerCreate(BaseModel):
 class Customer(CustomerCreate):
     id: UUID = Field(default_factory=uuid4)
     last_message_at: datetime | None = None
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=utc_now)
 
 
 class OrderCreate(BaseModel):
@@ -89,7 +90,7 @@ class OrderCreate(BaseModel):
 
 class Order(OrderCreate):
     id: UUID = Field(default_factory=uuid4)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=utc_now)
 
 
 class OrderAction(BaseModel):
@@ -123,7 +124,7 @@ class FollowUpCreate(BaseModel):
 
 class FollowUp(FollowUpCreate):
     id: UUID = Field(default_factory=uuid4)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=utc_now)
 
 
 class FollowUpQueueItem(BaseModel):
@@ -138,12 +139,12 @@ class ConversationMessage(BaseModel):
     sender: MessageDirection = MessageDirection.CUSTOMER
     text: str = Field(..., min_length=1)
     external_message_id: str | None = None
-    received_at: datetime = Field(default_factory=datetime.utcnow)
+    received_at: datetime = Field(default_factory=utc_now)
 
 
 class ConversationMessageOut(ConversationMessage):
     id: UUID = Field(default_factory=uuid4)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=utc_now)
 
 
 class MessageTag(BaseModel):
@@ -167,7 +168,7 @@ class SellerTask(BaseModel):
 
 class SellerTaskOut(SellerTask):
     id: UUID = Field(default_factory=uuid4)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=utc_now)
 
 
 class CustomerSignal(BaseModel):
@@ -249,7 +250,7 @@ class CatalogItemCreate(BaseModel):
 
 class CatalogItemRecord(CatalogItemCreate):
     id: UUID = Field(default_factory=uuid4)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=utc_now)
 
 
 class CheckoutDraft(BaseModel):
