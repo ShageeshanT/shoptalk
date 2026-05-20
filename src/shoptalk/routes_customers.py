@@ -3,6 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, HTTPException, status
 
 from shoptalk.schemas import Customer, CustomerCreate
+from shoptalk.status_updates import CustomerNoteUpdate
 from shoptalk.state import state
 
 router = APIRouter(prefix="/customers", tags=["customers"])
@@ -34,3 +35,13 @@ def get_customer(customer_id: UUID) -> Customer:
     if customer is None:
         raise HTTPException(status_code=404, detail="Customer not found")
     return customer
+
+
+@router.patch("/{customer_id}/notes", response_model=Customer)
+def update_customer_notes(customer_id: UUID, payload: CustomerNoteUpdate) -> Customer:
+    customer = state.customers.get(customer_id)
+    if customer is None:
+        raise HTTPException(status_code=404, detail="Customer not found")
+    updated = customer.model_copy(update={"notes": payload.notes})
+    state.customers.add(updated)
+    return updated

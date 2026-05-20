@@ -6,6 +6,7 @@ from shoptalk.order_risk import assess_order_risk
 from shoptalk.orders import is_active_order, seller_next_step
 from shoptalk.payments import build_payment_note, payment_required
 from shoptalk.schemas import Order, OrderAction, OrderCreate, OrderRisk, PaymentRequestDraft
+from shoptalk.status_updates import OrderStatusUpdate
 from shoptalk.state import state
 
 router = APIRouter(prefix="/orders", tags=["orders"])
@@ -73,3 +74,13 @@ def get_order_risk(order_id: UUID) -> OrderRisk:
     if order is None:
         raise HTTPException(status_code=404, detail="Order not found")
     return assess_order_risk(order)
+
+
+@router.patch("/{order_id}/status", response_model=Order)
+def update_order_status(order_id: UUID, payload: OrderStatusUpdate) -> Order:
+    order = state.orders.get(order_id)
+    if order is None:
+        raise HTTPException(status_code=404, detail="Order not found")
+    updated = order.model_copy(update={"status": payload.status})
+    state.orders.add(updated)
+    return updated
