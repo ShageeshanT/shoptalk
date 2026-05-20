@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException, status
 
 from shoptalk.followups import follow_up_priority
 from shoptalk.schemas import FollowUp, FollowUpCreate, FollowUpQueueItem
+from shoptalk.status_updates import FollowUpStatusUpdate
 from shoptalk.state import state
 
 router = APIRouter(prefix="/follow-ups", tags=["follow-ups"])
@@ -50,3 +51,13 @@ def get_follow_up(follow_up_id: UUID) -> FollowUp:
     if follow_up is None:
         raise HTTPException(status_code=404, detail="Follow-up not found")
     return follow_up
+
+
+@router.patch("/{follow_up_id}/status", response_model=FollowUp)
+def update_follow_up_status(follow_up_id: UUID, payload: FollowUpStatusUpdate) -> FollowUp:
+    follow_up = state.follow_ups.get(follow_up_id)
+    if follow_up is None:
+        raise HTTPException(status_code=404, detail="Follow-up not found")
+    updated = follow_up.model_copy(update={"status": payload.status})
+    state.follow_ups.add(updated)
+    return updated
