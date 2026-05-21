@@ -274,6 +274,7 @@ class CheckoutDraft(BaseModel):
     amount: float | None = None
     currency: str = "LKR"
     payment_label: str = "manual_transfer"
+    payment_instructions: str | None = None
     message: str
 
 
