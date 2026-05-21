@@ -21,13 +21,21 @@ def create_message(payload: ConversationMessage) -> ConversationMessageOut:
 
 
 @router.get("", response_model=list[ConversationMessageOut])
-def list_messages(business_id: UUID | None = None, customer_id: UUID | None = None) -> list[ConversationMessageOut]:
+def list_messages(
+    business_id: UUID | None = None,
+    customer_id: UUID | None = None,
+    search: str | None = None,
+    limit: int = 50,
+) -> list[ConversationMessageOut]:
     messages = state.messages.list()
     if business_id is not None:
         messages = [message for message in messages if message.business_id == business_id]
     if customer_id is not None:
         messages = [message for message in messages if message.customer_id == customer_id]
-    return messages
+    if search:
+        query = search.lower().strip()
+        messages = [message for message in messages if query in message.text.lower()]
+    return messages[-limit:]
 
 
 @router.get("/tags", response_model=list[MessageTag])
