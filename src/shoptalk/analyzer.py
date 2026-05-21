@@ -50,18 +50,35 @@ def analyze_message(payload: MessageAnalyzeRequest) -> MessageAnalysis:
 
     details = OrderDetails(quantity=_detect_quantity(text))
 
-    if "cake" in lowered:
-        details.product = "cake"
-    elif "shirt" in lowered or "t-shirt" in lowered:
-        details.product = "t-shirt"
-    elif "dress" in lowered:
-        details.product = "dress"
+    product_aliases = {
+        "cupcakes": "cupcakes",
+        "cupcake": "cupcakes",
+        "brownies": "brownies",
+        "brownie": "brownies",
+        "cookies": "cookies",
+        "cookie": "cookies",
+        "t-shirt": "t-shirt",
+        "shirt": "t-shirt",
+        "dress": "dress",
+        "cake": "cake",
+    }
+    for marker, product in product_aliases.items():
+        if marker in lowered:
+            details.product = product
+            break
 
-    size_match = re.search(r"\b(\d+(?:\.\d+)?\s?kg|small|medium|large|xl|xxl)\b", lowered)
+    size_match = re.search(r"\b(\d+(?:\.\d+)?\s?kg|small|medium|large|xl|xxl|box of \d+)\b", lowered)
     if size_match:
         details.size = size_match.group(1)
 
-    if "birthday" in lowered:
+    date_match = re.search(r"\b(today|tomorrow|monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b", lowered)
+    if date_match:
+        details.needed_by = date_match.group(1)
+
+    custom_match = re.search(r"(?:write|say|message) ['\"]?([^'\"]{2,60})['\"]?", text, flags=re.IGNORECASE)
+    if custom_match:
+        details.custom_text = custom_match.group(1).strip()
+    elif "birthday" in lowered:
         details.custom_text = "birthday message mentioned"
 
     if any(word in lowered for word in ["deliver", "delivery"]):
