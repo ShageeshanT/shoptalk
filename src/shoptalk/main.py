@@ -24,6 +24,7 @@ from shoptalk.routes_sales import router as sales_router
 from shoptalk.routes_search import router as search_router
 from shoptalk.routes_settings import router as settings_router
 from shoptalk.routes_tasks import router as tasks_router
+from shoptalk.routes_timeline import router as timeline_router
 from shoptalk.routes_threads import router as threads_router
 from shoptalk.schemas import MessageAnalysis, MessageAnalyzeRequest, ReplyDraft
 from shoptalk.seeds import seed_demo_data
@@ -48,6 +49,7 @@ app.include_router(sales_router)
 app.include_router(search_router)
 app.include_router(settings_router)
 app.include_router(tasks_router)
+app.include_router(timeline_router)
 app.include_router(followups_router)
 app.include_router(ingestion_router)
 app.include_router(health_router)

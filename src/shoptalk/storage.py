@@ -32,7 +32,14 @@ class InMemoryRepository(Generic[ModelT]):
         return builtins_list(self._items.values())
 
     def list_for_business(self, business_id: UUID) -> list[ModelT]:
-        return [item for item in self._items.values() if getattr(item, "business_id", None) == business_id]
+        return self.filter_by(business_id=business_id)
+
+    def filter_by(self, **criteria: object) -> list[ModelT]:
+        return [
+            item
+            for item in self._items.values()
+            if all(getattr(item, field, None) == expected for field, expected in criteria.items())
+        ]
 
     def extend(self, items: Iterable[ModelT]) -> list[ModelT]:
         return [self.add(item) for item in items]

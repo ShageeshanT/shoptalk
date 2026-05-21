@@ -228,6 +228,19 @@ class MessageThread(BaseModel):
     messages: list[MessageThreadItem]
 
 
+class CustomerTimelineEvent(BaseModel):
+    id: UUID
+    event_type: Literal["message", "order", "follow_up"]
+    title: str
+    occurred_at: datetime
+    detail: str | None = None
+
+
+class CustomerTimeline(BaseModel):
+    customer_id: UUID
+    events: list[CustomerTimelineEvent]
+
+
 class MessageSendDraft(BaseModel):
     business_id: UUID
     customer_id: UUID | None = None
