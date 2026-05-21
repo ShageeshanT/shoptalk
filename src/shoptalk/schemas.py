@@ -68,6 +68,9 @@ class CustomerCreate(BaseModel):
     name: str = Field(..., min_length=1)
     channel: str = "manual"
     channel_id: str | None = None
+    phone: str | None = None
+    email: str | None = None
+    tags: list[str] = Field(default_factory=list)
     notes: str | None = None
 
 
