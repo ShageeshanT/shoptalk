@@ -19,8 +19,13 @@ def create_approval_draft(payload: ApprovalDraft) -> ApprovalDraft:
 
 
 @router.get("", response_model=list[ApprovalDraft])
-def list_approval_drafts() -> list[ApprovalDraft]:
-    return state.approvals.list()
+def list_approval_drafts(status: str | None = None, business_id: UUID | None = None) -> list[ApprovalDraft]:
+    drafts = state.approvals.list()
+    if status is not None:
+        drafts = [draft for draft in drafts if draft.status.value == status]
+    if business_id is not None:
+        drafts = [draft for draft in drafts if draft.business_id == business_id]
+    return drafts
 
 
 @router.patch("/{draft_id}", response_model=ApprovalDraft)
