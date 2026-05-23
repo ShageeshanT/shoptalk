@@ -49,3 +49,17 @@ class OrderRecord(Base):
     delivery_date: Mapped[str | None] = mapped_column(String(80), nullable=True)
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[object] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class MessageRecord(Base):
+    __tablename__ = "messages"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    business_id: Mapped[str] = mapped_column(String(36), nullable=False, index=True)
+    customer_id: Mapped[str | None] = mapped_column(String(36), nullable=True, index=True)
+    channel: Mapped[str] = mapped_column(String(40), nullable=False)
+    sender: Mapped[str] = mapped_column(String(40), nullable=False)
+    text: Mapped[str] = mapped_column(Text, nullable=False)
+    external_message_id: Mapped[str | None] = mapped_column(String(160), nullable=True, unique=True)
+    received_at: Mapped[object] = mapped_column(DateTime(timezone=True), nullable=False)
+    created_at: Mapped[object] = mapped_column(DateTime(timezone=True), nullable=False)
