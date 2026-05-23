@@ -27,3 +27,8 @@ ShopTalk exposes a small sales desk API for WhatsApp-first sellers. The current 
 ## Human-in-the-loop rule
 
 ShopTalk can draft replies and payment instructions, but seller approval remains the default before anything is sent to a customer. Tiny businesses need speed, not a rogue chatbot with a payment link and main-character syndrome.
+
+
+## Persistence boundary
+
+The API is gaining a SQL repository layer so endpoint logic can move from process memory to durable seller data. Current repository coverage includes businesses, customers, orders, conversation messages, and follow ups.
