@@ -321,3 +321,8 @@ uvicorn shoptalk.main:app --reload
 ## API notes
 
 See `docs/API_OVERVIEW.md` for the current endpoint map and the main seller workflow.
+
+
+## Persistence status
+
+ShopTalk now includes the first SQL persistence layer using SQLAlchemy. It covers core seller records and keeps database access behind repositories so the API can move toward durable storage without rewriting product logic.
