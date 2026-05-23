@@ -88,3 +88,35 @@ def order_from_record(record: OrderRecord) -> Order:
         notes=record.notes,
         created_at=record.created_at,
     )
+
+
+from shoptalk.db_models import MessageRecord
+from shoptalk.schemas import ConversationMessageOut
+
+
+def message_to_record(message: ConversationMessageOut) -> MessageRecord:
+    return MessageRecord(
+        id=str(message.id),
+        business_id=str(message.business_id),
+        customer_id=str(message.customer_id) if message.customer_id else None,
+        channel=message.channel,
+        sender=message.sender.value,
+        text=message.text,
+        external_message_id=message.external_message_id,
+        received_at=message.received_at,
+        created_at=message.created_at,
+    )
+
+
+def message_from_record(record: MessageRecord) -> ConversationMessageOut:
+    return ConversationMessageOut(
+        id=record.id,
+        business_id=record.business_id,
+        customer_id=record.customer_id,
+        channel=record.channel,
+        sender=record.sender,
+        text=record.text,
+        external_message_id=record.external_message_id,
+        received_at=record.received_at,
+        created_at=record.created_at,
+    )
