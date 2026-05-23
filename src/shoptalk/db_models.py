@@ -63,3 +63,16 @@ class MessageRecord(Base):
     external_message_id: Mapped[str | None] = mapped_column(String(160), nullable=True, unique=True)
     received_at: Mapped[object] = mapped_column(DateTime(timezone=True), nullable=False)
     created_at: Mapped[object] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class FollowUpRecord(Base):
+    __tablename__ = "follow_ups"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    business_id: Mapped[str] = mapped_column(String(36), nullable=False, index=True)
+    customer_id: Mapped[str | None] = mapped_column(String(36), nullable=True, index=True)
+    order_id: Mapped[str | None] = mapped_column(String(36), nullable=True, index=True)
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
+    due_at: Mapped[object | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    status: Mapped[str] = mapped_column(String(40), nullable=False)
+    created_at: Mapped[object] = mapped_column(DateTime(timezone=True), nullable=False)
