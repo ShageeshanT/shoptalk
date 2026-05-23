@@ -11,4 +11,5 @@ def test_repository_factory_builds_sql_repositories():
     assert repos.customers is not None
     assert repos.orders is not None
     assert repos.messages is not None
+    assert repos.follow_ups is not None
     session.close()
