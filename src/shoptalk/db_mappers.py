@@ -120,3 +120,33 @@ def message_from_record(record: MessageRecord) -> ConversationMessageOut:
         received_at=record.received_at,
         created_at=record.created_at,
     )
+
+
+from shoptalk.db_models import FollowUpRecord
+from shoptalk.schemas import FollowUp
+
+
+def followup_to_record(follow_up: FollowUp) -> FollowUpRecord:
+    return FollowUpRecord(
+        id=str(follow_up.id),
+        business_id=str(follow_up.business_id),
+        customer_id=str(follow_up.customer_id) if follow_up.customer_id else None,
+        order_id=str(follow_up.order_id) if follow_up.order_id else None,
+        title=follow_up.title,
+        due_at=follow_up.due_at,
+        status=follow_up.status.value,
+        created_at=follow_up.created_at,
+    )
+
+
+def followup_from_record(record: FollowUpRecord) -> FollowUp:
+    return FollowUp(
+        id=record.id,
+        business_id=record.business_id,
+        customer_id=record.customer_id,
+        order_id=record.order_id,
+        title=record.title,
+        due_at=record.due_at,
+        status=record.status,
+        created_at=record.created_at,
+    )
