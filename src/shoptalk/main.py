@@ -13,6 +13,7 @@ from shoptalk.routes_customers import router as customers_router
 from shoptalk.routes_checkout import router as checkout_router
 from shoptalk.routes_conversations import router as conversations_router
 from shoptalk.routes_dashboard import router as dashboard_router
+from shoptalk.routes_database import router as database_router
 from shoptalk.routes_followups import router as followups_router
 from shoptalk.routes_ingestion import router as ingestion_router
 from shoptalk.routes_health import router as health_router
@@ -55,6 +56,7 @@ app.include_router(ingestion_router)
 app.include_router(health_router)
 app.include_router(messages_router)
 app.include_router(dashboard_router)
+app.include_router(database_router)
 app.include_router(threads_router)
 
 
