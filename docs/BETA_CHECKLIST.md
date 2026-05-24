@@ -20,3 +20,10 @@
 - Seller dashboard UI
 - Basic auth and business access control
 - Demo data reset button
+
+
+## Database readiness
+
+- Confirm `DATABASE_URL` is configured for the target environment.
+- Run `/database/readiness` after deployment.
+- Confirm backups and migration process before using real seller data.
