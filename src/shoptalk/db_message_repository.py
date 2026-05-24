@@ -2,6 +2,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from shoptalk.db_mappers import message_from_record, message_to_record
+from shoptalk.db_message_queries import filter_messages_by_channel, filter_messages_by_customer
 from shoptalk.db_models import MessageRecord
 from shoptalk.persistence_errors import DuplicateRecordError
 from shoptalk.schemas import ConversationMessage, ConversationMessageOut
@@ -22,10 +23,11 @@ class SqlMessageRepository:
         return message
 
     def list_for_business(self, business_id) -> list[ConversationMessageOut]:
-        records = (
-            self.session.query(MessageRecord)
-            .filter(MessageRecord.business_id == str(business_id))
-            .order_by(MessageRecord.received_at.desc())
-            .all()
-        )
+        return self.search_for_business(business_id)
+
+    def search_for_business(self, business_id, customer_id=None, channel: str | None = None) -> list[ConversationMessageOut]:
+        query = self.session.query(MessageRecord).filter(MessageRecord.business_id == str(business_id))
+        query = filter_messages_by_customer(query, customer_id)
+        query = filter_messages_by_channel(query, channel)
+        records = query.order_by(MessageRecord.received_at.desc()).all()
         return [message_from_record(record) for record in records]
