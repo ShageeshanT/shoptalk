@@ -32,3 +32,8 @@ ShopTalk can draft replies and payment instructions, but seller approval remains
 ## Persistence boundary
 
 The API is gaining a SQL repository layer so endpoint logic can move from process memory to durable seller data. Current repository coverage includes businesses, customers, orders, conversation messages, and follow ups.
+
+
+## Database diagnostics
+
+`GET /database/health` confirms SQL connectivity. `GET /database/readiness` reports whether the expected persistence tables are available.
