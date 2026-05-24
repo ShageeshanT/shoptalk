@@ -13,3 +13,10 @@
 - Added SQLite session helpers and runtime database wiring.
 - Added SQL repositories for businesses, customers, orders, messages, and follow ups.
 - Added database health checks and storage documentation.
+
+
+## Database hardening
+
+- Added readiness checks, masked database diagnostics, and database health routes.
+- Added filtered SQL queries for orders, customers, messages, and follow ups.
+- Added database snapshots, counts, and idempotent demo seeding helpers.

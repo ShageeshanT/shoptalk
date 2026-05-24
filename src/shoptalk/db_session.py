@@ -10,7 +10,12 @@ from shoptalk.db_url import build_sqlite_url, default_database_path
 def create_db_engine(database_url: str | None = None):
     url = database_url or build_sqlite_url(default_database_path())
     connect_args = {"check_same_thread": False} if url.startswith("sqlite") else {}
-    return create_engine(url, connect_args=connect_args)
+    pool_options = {}
+    if url == "sqlite+pysqlite:///:memory:":
+        from sqlalchemy.pool import StaticPool
+
+        pool_options["poolclass"] = StaticPool
+    return create_engine(url, connect_args=connect_args, **pool_options)
 
 
 def initialize_database(engine) -> None:
