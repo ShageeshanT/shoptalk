@@ -11,3 +11,8 @@ ShopTalk keeps product logic separate from channel adapters.
 5. Seller workflows expose review queues, approvals, dashboard metrics, and exports.
 
 The MVP still uses in-memory repositories so the sales loop can move quickly. The next backend milestone is replacing those repositories with durable database-backed storage without changing route handlers.
+
+
+## Persistence architecture
+
+The persistence layer now separates SQLAlchemy records, schema mappers, repositories, query helpers, and runtime session dependencies. This keeps the API routes able to swap in durable storage without coupling business logic to raw SQL.
