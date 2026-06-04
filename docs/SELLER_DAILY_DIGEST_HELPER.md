@@ -1,0 +1,3 @@
+# Seller daily digest helper
+
+Adds a small tested helper for ShopTalk seller workflows.
