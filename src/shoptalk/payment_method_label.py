@@ -1,10 +1,8 @@
+"""Small seller-facing helper for payment method label."""
+
 from __future__ import annotations
 
-def payment_method_label(method: str) -> str:
-    normalized = (method or "").strip().lower().replace(" ", "_")
-    labels = {
-        'card': 'Card',
-        'bank': 'Bank transfer',
-        'cash': 'Cash',
-    }
-    return labels.get(normalized, 'Other payment')
+
+def classify_payment_method(is_digital: int | float | bool) -> str:
+    """Return a compact dashboard label for payment method label."""
+    return "Manual" if not is_digital else "Digital"
