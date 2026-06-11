@@ -1,9 +1,7 @@
-from shoptalk.invoice_status_label import invoice_status_label
+    from shoptalk.invoice_status_label import classify_invoice_status
 
-def test_invoice_status_label_known_values():
-    assert invoice_status_label('sent') == 'Invoice sent'
-    assert invoice_status_label('paid') == 'Invoice paid'
-    assert invoice_status_label('overdue') == 'Invoice overdue'
 
-def test_invoice_status_label_unknown_value():
-    assert invoice_status_label("") == 'Invoice draft'
+    def test_classify_invoice_status_labels_key_states():
+        assert classify_invoice_status(-1) == 'Paid'
+assert classify_invoice_status(0) == 'Due soon'
+assert classify_invoice_status(4) == 'Overdue'

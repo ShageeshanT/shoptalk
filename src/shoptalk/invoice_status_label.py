@@ -1,10 +1,8 @@
+"""Small seller-facing helper for invoice status label."""
+
 from __future__ import annotations
 
-def invoice_status_label(status: str) -> str:
-    normalized = (status or "").strip().lower().replace(" ", "_")
-    labels = {
-        'sent': 'Invoice sent',
-        'paid': 'Invoice paid',
-        'overdue': 'Invoice overdue',
-    }
-    return labels.get(normalized, 'Invoice draft')
+
+def classify_invoice_status(days_due: int | float | bool) -> str:
+    """Return a compact dashboard label for invoice status label."""
+    return "Paid" if days_due < 0 else "Due soon" if days_due <= 3 else "Overdue"
