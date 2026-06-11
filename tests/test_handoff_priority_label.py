@@ -1,9 +1,7 @@
-from shoptalk.handoff_priority_label import handoff_priority_label
+    from shoptalk.handoff_priority_label import classify_handoff_priority
 
-def test_handoff_priority_label_thresholds():
-    assert handoff_priority_label(3) == 'Urgent handoff'
-    assert handoff_priority_label(2) == 'Normal handoff'
-    assert handoff_priority_label(1) == 'Low handoff'
 
-def test_handoff_priority_label_invalid_value():
-    assert handoff_priority_label("bad") == 'No handoff'
+    def test_classify_handoff_priority_labels_key_states():
+        assert classify_handoff_priority(-1) == 'Normal'
+assert classify_handoff_priority(3) == 'Important'
+assert classify_handoff_priority(10) == 'Urgent'
