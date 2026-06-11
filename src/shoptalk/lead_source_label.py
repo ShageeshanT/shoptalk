@@ -1,4 +1,8 @@
+"""Small seller-facing helper for lead source label."""
+
 from __future__ import annotations
 
-def lead_source_label(source: str | None) -> str:
-    return source.replace("_", " ").title() if source else "Unknown source"
+
+def classify_lead_source(known: int | float | bool) -> str:
+    """Return a compact dashboard label for lead source label."""
+    return "Unknown" if not known else "Known"
