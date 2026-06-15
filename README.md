@@ -1,10 +1,42 @@
 # ShopTalk
 
+![Build](https://img.shields.io/github/actions/workflow/status/ShageeshanT/shoptalk/ci.yml?branch=main&label=build)
+![License](https://img.shields.io/github/license/ShageeshanT/shoptalk)
+![Python](https://img.shields.io/badge/python-3.11%2B-blue)
+![Status](https://img.shields.io/badge/status-beta-orange)
+
 Turn customer chats into orders, payments, and follow-ups.
 
 ShopTalk is an AI sales desk for WhatsApp-first small businesses. It helps owners understand messy customer messages, draft better replies, extract order details, track pending payments, and remember follow-ups without surrendering their customer relationships to a soulless chatbot.
 
-The first version focuses on a manual web MVP: paste a customer message, get structured order insights, a suggested reply, and a follow-up plan. WhatsApp and Telegram integrations can be added later once the core workflow is proven with real businesses.
+---
+
+## Quick Start
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/ShageeshanT/shoptalk.git
+cd shoptalk
+
+# 2. Create a virtual environment
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+# 3. Install dependencies
+pip install -e ".[dev]"
+
+# 4. Copy environment config
+cp .env.example .env
+# Edit .env and add your OPENAI_API_KEY
+
+# 5. Start the API server
+uvicorn shoptalk.main:app --reload
+
+# 6. Open the interactive docs
+open http://localhost:8000/docs
+```
+
+---
 
 ## Why ShopTalk exists
 
@@ -18,7 +50,7 @@ A single WhatsApp inbox can contain:
 - Delivery questions
 - Angry customers
 - Refund requests
-- People who said “I’ll confirm tonight” and then vanished into the fog
+- People who said "I'll confirm tonight" and then vanished into the fog
 
 Most owners do not need a fully autonomous chatbot. They need a fast assistant that keeps them in control.
 
@@ -54,7 +86,7 @@ ShopTalk extracts:
 
 Suggested reply:
 
-> Hi! Yes, we can make a 1kg chocolate cake for Saturday evening with “Happy Birthday Amaya” written on it. Would you like pickup or delivery?
+> Hi! Yes, we can make a 1kg chocolate cake for Saturday evening with "Happy Birthday Amaya" written on it. Would you like pickup or delivery?
 
 ## MVP scope
 
@@ -249,7 +281,7 @@ review, edit, save, reply, follow up
 
 ## Roadmap
 
-### Phase 1: Manual MVP
+### Phase 1: Manual MVP ✅
 
 - Create backend models
 - Add message analyzer endpoint
@@ -257,7 +289,7 @@ review, edit, save, reply, follow up
 - Save customers, orders, and follow-ups
 - Build simple dashboard
 
-### Phase 2: Workflow MVP
+### Phase 2: Workflow MVP 🚧
 
 - Order board
 - Follow-up list
@@ -291,14 +323,23 @@ review, edit, save, reply, follow up
 - Useful over flashy
 - Real business pain over startup theatre
 
+## Contributing
+
+See [CONTRIBUTING.md](docs/CONTRIBUTING.md) for setup steps, PR process, and code style.
+
+## Changelog
+
+See [CHANGELOG.md](docs/CHANGELOG.md) for version history.
+
 ## Status
 
-Early planning and foundation stage.
+Active development — beta stage.
 
 ## License
 
 MIT
 
+---
 
 ## Current MVP API
 
@@ -321,7 +362,6 @@ uvicorn shoptalk.main:app --reload
 ## API notes
 
 See `docs/API_OVERVIEW.md` for the current endpoint map and the main seller workflow.
-
 
 ## Persistence status
 
