@@ -1,18 +1,80 @@
 # ShopTalk Architecture
 
-ShopTalk keeps product logic separate from channel adapters.
+## Overview
 
-## Layers
+ShopTalk is a FastAPI application that sits between messaging channels (WhatsApp, Telegram)
+and a seller's order management workflow. It uses OpenAI to parse unstructured customer
+messages into structured order data and generates suggested replies.
 
-1. Channel adapters receive WhatsApp, Telegram, Instagram, or manual messages.
-2. Normalization converts raw events into internal customer messages.
-3. Analysis extracts intent, urgency, order details, and reply drafts.
-4. Repositories persist businesses, customers, orders, messages, and follow-ups.
-5. Seller workflows expose review queues, approvals, dashboard metrics, and exports.
+## High-Level Data Flow
 
-The MVP still uses in-memory repositories so the sales loop can move quickly. The next backend milestone is replacing those repositories with durable database-backed storage without changing route handlers.
+```
+Customer (WhatsApp/Telegram)
+        |
+        v
+  Channel Adapter          <- normalises platform-specific payloads
+        |
+        v
+  Analysis Service         <- calls OpenAI, returns structured intent
+        |
+        v
+  Order / Customer Repo    <- persists data to PostgreSQL via SQLAlchemy
+        |
+        v
+  Dashboard / Briefing     <- seller views pending orders and follow-ups
+```
 
+## Layer Responsibilities
 
-## Persistence architecture
+| Layer | Location | Responsibility |
+|-------|----------|----------------|
+| Routes | `src/shoptalk/routes/` | HTTP request/response, input validation |
+| Services | `src/shoptalk/services/` | Business logic, AI calls |
+| Repositories | `src/shoptalk/repositories/` | Database queries, no business logic |
+| Models | `src/shoptalk/models/` | SQLAlchemy ORM table definitions |
+| Schemas | `src/shoptalk/schemas/` | Pydantic request/response contracts |
+| Channels | `src/shoptalk/channels/` | Platform-specific webhook adapters |
 
-The persistence layer now separates SQLAlchemy records, schema mappers, repositories, query helpers, and runtime session dependencies. This keeps the API routes able to swap in durable storage without coupling business logic to raw SQL.
+## Key Design Decisions
+
+### Async-first
+All route handlers and service methods are `async`. SQLAlchemy is used with
+`asyncpg` in production and `aiosqlite` in development.
+
+### Dependency injection
+FastAPI's `Depends()` system is used throughout. `get_settings()` and
+`get_db_session()` are the two primary dependencies.
+
+### Stateless API
+The API is stateless. All state lives in the database. This makes horizontal
+scaling straightforward — run multiple uvicorn workers or containers behind
+a load balancer.
+
+### AI as a service
+OpenAI is called only in `AnalysisService`. If the API key is missing or the
+call fails, a safe fallback response is returned so the system degrades
+gracefully rather than erroring.
+
+## Database Schema
+
+```
+customers
+  id, business_id, phone, name, channel, is_active, notes, created_at, updated_at
+
+orders
+  id, business_id, customer_id, product, quantity, size, price,
+  status, needed_by, delivery_address, notes, raw_message, created_at, updated_at
+
+followups
+  id, business_id, customer_id, order_id, reason, due_at,
+  completed, completed_at, notes, created_at
+```
+
+## Future Phases
+
+See [ROADMAP.md](ROADMAP.md) for the full plan. Upcoming architectural additions:
+
+- **Phase 3**: Product catalog with fuzzy matching
+- **Phase 4**: Telegram channel adapter
+- **Phase 5**: WhatsApp Business API webhook handler
+- **Phase 6**: Multi-tenant business isolation with row-level security
