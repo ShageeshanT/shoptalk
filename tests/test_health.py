@@ -1,9 +1,29 @@
-from shoptalk.health import build_health_check
+"""Tests for the /health endpoint."""
+
+from fastapi.testclient import TestClient
+
+from shoptalk.main import app
 
 
-def test_health_check_reports_in_memory_stores() -> None:
-    health = build_health_check()
+client = TestClient(app)
 
-    assert health.status == "ok"
-    assert {check.name for check in health.checks} == {"businesses", "messages", "orders", "approvals", "follow_ups"}
-    assert all(check.ok for check in health.checks)
+
+def test_health_returns_ok():
+    response = client.get("/health")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "ok"
+
+
+def test_health_includes_version():
+    response = client.get("/health")
+    data = response.json()
+    assert "version" in data
+    assert data["version"] != ""
+
+
+def test_health_includes_uptime():
+    response = client.get("/health")
+    data = response.json()
+    assert "uptime_seconds" in data
+    assert data["uptime_seconds"] >= 0
