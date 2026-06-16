@@ -1,100 +1,53 @@
-"""Order domain model.
+"""SQLAlchemy ORM model for orders."""
 
-An Order represents a confirmed or pending purchase from a customer.
-Orders move through a status pipeline from inquiry to delivery.
-"""
+import enum
+from datetime import datetime
 
-from __future__ import annotations
+from sqlalchemy import DateTime, Enum, Float, Integer, String, Text, func
+from sqlalchemy.orm import Mapped, mapped_column
 
-from datetime import datetime, timezone
-from enum import Enum
-from uuid import UUID, uuid4
-
-from pydantic import BaseModel, Field
+from shoptalk.models.base import Base
 
 
-class OrderStatus(str, Enum):
-    """Order lifecycle statuses.
+class OrderStatus(str, enum.Enum):
+    """Lifecycle states for an order."""
 
-    The pipeline moves roughly left to right:
-    NEW_INQUIRY → CONFIRMED → PAYMENT_PENDING → PAID → PREPARING → READY → DELIVERED
-
-    CANCELLED can occur at any stage.
-    """
-
-    NEW_INQUIRY = "new_inquiry"
+    PENDING = "pending"
     CONFIRMED = "confirmed"
-    PAYMENT_PENDING = "payment_pending"
-    PAID = "paid"
-    PREPARING = "preparing"
+    IN_PROGRESS = "in_progress"
     READY = "ready"
     DELIVERED = "delivered"
     CANCELLED = "cancelled"
 
 
-class Order(BaseModel):
-    """A customer order tracked through the sales pipeline.
+class Order(Base):
+    """Represents a customer order tracked through its lifecycle."""
 
-    Attributes
-    ----------
-    id:
-        Unique identifier for this order.
-    business_id:
-        The business fulfilling this order.
-    customer_id:
-        The customer who placed this order.
-    product:
-        Human-readable product description extracted from the customer message.
-    quantity:
-        Number of units ordered.
-    status:
-        Current position in the order pipeline.
-    created_at:
-        When the order was created (UTC).
-    follow_up_needed:
-        Whether a follow-up action is required (e.g. payment chase, delivery confirmation).
-    notes:
-        Optional seller notes about this order.
-    total_amount:
-        Order total in the business currency, if known.
-    delivery_date:
-        Requested delivery or pickup date, if specified.
+    __tablename__ = "orders"
 
-    Example
-    -------
-    >>> order = Order(
-    ...     business_id=uuid4(),
-    ...     customer_id=uuid4(),
-    ...     product="1kg chocolate cake",
-    ...     quantity=1,
-    ... )
-    >>> order.status
-    'new_inquiry'
-    """
-
-    id: UUID = Field(default_factory=uuid4, description="Unique order identifier")
-    business_id: UUID = Field(..., description="Business fulfilling this order")
-    customer_id: UUID = Field(..., description="Customer who placed this order")
-    product: str = Field(..., min_length=1, description="Product description")
-    quantity: int = Field(default=1, ge=1, description="Number of units ordered")
-    status: OrderStatus = Field(
-        default=OrderStatus.NEW_INQUIRY,
-        description="Current order pipeline status",
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    business_id: Mapped[str] = mapped_column(String(36), nullable=False, index=True)
+    customer_id: Mapped[str] = mapped_column(String(36), nullable=False, index=True)
+    product: Mapped[str] = mapped_column(String(200), nullable=False)
+    quantity: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    size: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    price: Mapped[float | None] = mapped_column(Float, nullable=True)
+    status: Mapped[OrderStatus] = mapped_column(
+        Enum(OrderStatus), nullable=False, default=OrderStatus.PENDING
     )
-    created_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc),
-        description="When the order was created (UTC)",
+    needed_by: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    delivery_address: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    raw_message: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
     )
-    follow_up_needed: bool = Field(
-        default=True,
-        description="Whether a follow-up action is required",
-    )
-    notes: str | None = Field(default=None, description="Optional seller notes")
-    total_amount: float | None = Field(
-        default=None, ge=0, description="Order total in business currency"
-    )
-    delivery_date: datetime | None = Field(
-        default=None, description="Requested delivery or pickup date"
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
     )
 
-    model_config = {"use_enum_values": True}
+    def __repr__(self) -> str:
+        return f"<Order id={self.id!r} product={self.product!r} status={self.status!r}>"
