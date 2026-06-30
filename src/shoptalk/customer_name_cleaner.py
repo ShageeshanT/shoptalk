@@ -1,2 +1,4 @@
-def clean_customer_name(name):
-    return " ".join(str(name).strip().split()).title()
+from __future__ import annotations
+
+def customer_name_cleaner(name: str) -> str:
+    return " ".join(name.strip().title().split())
