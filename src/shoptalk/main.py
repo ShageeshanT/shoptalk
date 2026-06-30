@@ -1,8 +1,13 @@
+from datetime import datetime, timezone
+
 from fastapi import FastAPI
+
+from shoptalk import __version__
 
 from shoptalk.analyzer import analyze_message
 from shoptalk.reply import build_suggested_reply
 from shoptalk.metrics import business_metrics
+from shoptalk.health import build_health_check
 from shoptalk.demo import seed_demo_data
 from shoptalk.routes_approvals import router as approvals_router
 from shoptalk.routes_businesses import router as businesses_router
@@ -16,7 +21,6 @@ from shoptalk.routes_dashboard import router as dashboard_router
 from shoptalk.routes_database import router as database_router
 from shoptalk.routes_followups import router as followups_router
 from shoptalk.routes_ingestion import router as ingestion_router
-from shoptalk.routes_health import router as health_router
 from shoptalk.routes_kanban import router as kanban_router
 from shoptalk.routes_messages import router as messages_router
 from shoptalk.routes_orders import router as orders_router
@@ -27,13 +31,15 @@ from shoptalk.routes_settings import router as settings_router
 from shoptalk.routes_tasks import router as tasks_router
 from shoptalk.routes_timeline import router as timeline_router
 from shoptalk.routes_threads import router as threads_router
-from shoptalk.schemas import MessageAnalysis, MessageAnalyzeRequest, ReplyDraft
+from shoptalk.schemas import HealthCheckItem, MessageAnalysis, MessageAnalyzeRequest, ReplyDraft
 from shoptalk.seeds import seed_demo_data
+
+_started_at = datetime.now(timezone.utc)
 
 app = FastAPI(
     title="ShopTalk API",
     description="AI sales desk for WhatsApp-first small businesses.",
-    version="0.1.0",
+    version=__version__,
 )
 app.include_router(approvals_router)
 app.include_router(businesses_router)
@@ -53,7 +59,6 @@ app.include_router(tasks_router)
 app.include_router(timeline_router)
 app.include_router(followups_router)
 app.include_router(ingestion_router)
-app.include_router(health_router)
 app.include_router(messages_router)
 app.include_router(dashboard_router)
 app.include_router(database_router)
@@ -67,8 +72,15 @@ def seed_demo() -> dict[str, str]:
 
 
 @app.get("/health")
-def health() -> dict[str, str]:
-    return {"status": "ok", "service": "shoptalk"}
+def health() -> dict[str, str | float | list[HealthCheckItem]]:
+    uptime = (datetime.now(timezone.utc) - _started_at).total_seconds()
+    health_check = build_health_check().model_dump()
+    return {
+        **health_check,
+        "service": "shoptalk",
+        "version": __version__,
+        "uptime_seconds": uptime,
+    }
 
 
 @app.post("/analyze", response_model=MessageAnalysis)
