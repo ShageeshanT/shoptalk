@@ -30,3 +30,5 @@
 - `approval_queue_size_label` adds a tested approval queue size helper for compact seller workflow copy.
 
 - `discount_risk_label` adds a tested discount risk helper for compact seller workflow copy.
+
+- `fulfillment_delay_label` adds a tested fulfillment delay helper for compact seller workflow copy.
