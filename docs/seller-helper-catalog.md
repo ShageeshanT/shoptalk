@@ -22,3 +22,5 @@
 - `pickup_window_label` adds a tested pickup window helper for compact seller workflow copy.
 
 - `seller_focus_label` adds a tested seller focus helper for compact seller workflow copy.
+
+- `chat_source_label` adds a tested chat source helper for compact seller workflow copy.
