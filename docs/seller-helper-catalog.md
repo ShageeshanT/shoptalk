@@ -24,3 +24,5 @@
 - `seller_focus_label` adds a tested seller focus helper for compact seller workflow copy.
 
 - `chat_source_label` adds a tested chat source helper for compact seller workflow copy.
+
+- `customer_language_label` adds a tested customer language helper for compact seller workflow copy.
