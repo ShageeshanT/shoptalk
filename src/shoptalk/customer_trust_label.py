@@ -1,14 +1,6 @@
-from __future__ import annotations
+"""Small presentation helper for ShopTalk seller workflows."""
 
-def customer_trust_label(score: int) -> str:
-    try:
-        value = int(score)
-    except (TypeError, ValueError):
-        value = 0
-    if value >= 80:
-        return 'Trusted customer'
-    if value >= 50:
-        return 'Normal trust'
-    if value >= 20:
-        return 'Low trust'
-    return 'Unknown trust'
+
+def label_customer_trust(completed_orders: int) -> str:
+    """Return a compact customer trust label for seller-facing UI."""
+    return "trusted" if completed_orders >= 3 else "new"

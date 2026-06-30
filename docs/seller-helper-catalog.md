@@ -8,3 +8,5 @@
 - `cart_size_label` adds a tested cart size helper for compact seller workflow copy.
 
 - `delivery_distance_label` adds a tested delivery distance helper for compact seller workflow copy.
+
+- `payment_receipt_label` adds a tested payment receipt helper for compact seller workflow copy.
