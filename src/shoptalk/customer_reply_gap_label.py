@@ -1,8 +1,6 @@
-"""Small seller-facing helper for customer reply gap label."""
-
-from __future__ import annotations
+"""Small presentation helper for ShopTalk seller workflows."""
 
 
-def classify_customer_reply_gap(hours: int | float | bool) -> str:
-    """Return a compact dashboard label for customer reply gap label."""
-    return "Recent" if hours <= 2 else "Follow up" if hours <= 48 else "Dormant"
+def label_customer_reply_gap(minutes: int) -> str:
+    """Return a compact customer reply gap label for seller-facing UI."""
+    return "urgent" if minutes >= 120 else "watch" if minutes >= 45 else "fresh"
