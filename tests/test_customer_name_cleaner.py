@@ -1,5 +1,4 @@
-from shoptalk.customer_name_cleaner import clean_customer_name
+from shoptalk.customer_name_cleaner import customer_name_cleaner
 
-
-def test_clean_customer_name():
-    assert clean_customer_name("  nimal   perera ") == "Nimal Perera"
+def test_customer_name_cleaner():
+    assert customer_name_cleaner("  nIma   perera ") == "Nima Perera"
