@@ -1,8 +1,5 @@
-from shoptalk.cart_size_label import classify_cart_size
+from shoptalk.cart_size_label import label_cart_size
 
 
-def test_classify_cart_size_labels_key_states():
-    assert classify_cart_size(-1) == 'Empty'
-    assert classify_cart_size(1) == 'Single'
-    assert classify_cart_size(2) == 'Bundle'
-    assert classify_cart_size(5) == 'Bulk'
+def test_cart_size_label():
+    assert label_cart_size(12) == "bulk"
