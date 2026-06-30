@@ -6,3 +6,5 @@
 - `lead_temperature_label` adds a tested lead temperature helper for compact seller workflow copy.
 
 - `cart_size_label` adds a tested cart size helper for compact seller workflow copy.
+
+- `delivery_distance_label` adds a tested delivery distance helper for compact seller workflow copy.
