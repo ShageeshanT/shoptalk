@@ -1,6 +1,6 @@
-from __future__ import annotations
+"""Small presentation helper for ShopTalk seller workflows."""
 
-def seller_focus_label(score: int) -> str:
-    if score >= 80: return "Clear focus"
-    if score >= 50: return "Mixed focus"
-    return "Needs attention"
+
+def label_seller_focus(overdue: int) -> str:
+    """Return a compact seller focus label for seller-facing UI."""
+    return "overdue" if overdue > 0 else "clean"

@@ -1,4 +1,5 @@
-from shoptalk.seller_focus_label import seller_focus_label
+from shoptalk.seller_focus_label import label_seller_focus
+
 
 def test_seller_focus_label():
-    assert seller_focus_label(40)=="Needs attention"
+    assert label_seller_focus(1) == "overdue"
