@@ -34,3 +34,5 @@
 - `fulfillment_delay_label` adds a tested fulfillment delay helper for compact seller workflow copy.
 
 - `payment_followup_label` adds a tested payment followup helper for compact seller workflow copy.
+
+- `catalog_match_label` adds a tested catalog match helper for compact seller workflow copy.
