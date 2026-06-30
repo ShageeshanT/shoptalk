@@ -26,3 +26,5 @@
 - `chat_source_label` adds a tested chat source helper for compact seller workflow copy.
 
 - `customer_language_label` adds a tested customer language helper for compact seller workflow copy.
+
+- `approval_queue_size_label` adds a tested approval queue size helper for compact seller workflow copy.
