@@ -14,3 +14,5 @@
 - `customer_trust_label` adds a tested customer trust helper for compact seller workflow copy.
 
 - `reply_tone_label` adds a tested reply tone helper for compact seller workflow copy.
+
+- `order_packaging_label` adds a tested order packaging helper for compact seller workflow copy.
