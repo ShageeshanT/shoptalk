@@ -36,3 +36,5 @@
 - `payment_followup_label` adds a tested payment followup helper for compact seller workflow copy.
 
 - `catalog_match_label` adds a tested catalog match helper for compact seller workflow copy.
+
+- `seller_dashboard_hint` adds a tested seller dashboard hint helper for compact seller workflow copy.
