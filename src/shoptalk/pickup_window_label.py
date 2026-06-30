@@ -1,6 +1,10 @@
-"""Small presentation helper for ShopTalk seller workflows."""
+from __future__ import annotations
 
-
-def label_pickup_window(hours: int) -> str:
-    """Return a compact pickup window label for seller-facing UI."""
-    return "today" if hours <= 24 else "later"
+def pickup_window_label(minutes: int) -> str:
+    if minutes <= 0:
+        return "now"
+    if minutes <= 60:
+        return "within the hour"
+    if minutes <= 24 * 60:
+        return "today"
+    return "later"
