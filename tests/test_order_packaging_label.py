@@ -1,5 +1,7 @@
-from shoptalk.order_packaging_label import label_order_packaging
+from shoptalk.order_packaging_label import classify_order_packaging
 
 
-def test_order_packaging_label():
-    assert label_order_packaging(True) == "fragile"
+def test_classify_order_packaging_labels_key_states():
+    assert classify_order_packaging(2) == "Small pack"
+    assert classify_order_packaging(3) == "Medium pack"
+    assert classify_order_packaging(10) == "Bulk pack"
