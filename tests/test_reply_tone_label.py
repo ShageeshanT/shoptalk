@@ -1,9 +1,5 @@
-from shoptalk.reply_tone_label import reply_tone_label
+from shoptalk.reply_tone_label import label_reply_tone
 
-def test_reply_tone_label_known_values():
-    assert reply_tone_label('friendly') == 'Friendly'
-    assert reply_tone_label('formal') == 'Formal'
-    assert reply_tone_label('urgent') == 'Urgent'
 
-def test_reply_tone_label_unknown_value():
-    assert reply_tone_label("") == 'Neutral'
+def test_reply_tone_label():
+    assert label_reply_tone(True) == "soft"

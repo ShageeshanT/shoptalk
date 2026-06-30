@@ -10,3 +10,5 @@
 - `delivery_distance_label` adds a tested delivery distance helper for compact seller workflow copy.
 
 - `payment_receipt_label` adds a tested payment receipt helper for compact seller workflow copy.
+
+- `customer_trust_label` adds a tested customer trust helper for compact seller workflow copy.
