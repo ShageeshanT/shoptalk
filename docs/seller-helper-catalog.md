@@ -16,3 +16,5 @@
 - `reply_tone_label` adds a tested reply tone helper for compact seller workflow copy.
 
 - `order_packaging_label` adds a tested order packaging helper for compact seller workflow copy.
+
+- `stock_warning_label` adds a tested stock warning helper for compact seller workflow copy.
