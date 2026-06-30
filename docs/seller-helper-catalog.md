@@ -18,3 +18,5 @@
 - `order_packaging_label` adds a tested order packaging helper for compact seller workflow copy.
 
 - `stock_warning_label` adds a tested stock warning helper for compact seller workflow copy.
+
+- `pickup_window_label` adds a tested pickup window helper for compact seller workflow copy.
