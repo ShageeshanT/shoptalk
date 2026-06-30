@@ -32,3 +32,5 @@
 - `discount_risk_label` adds a tested discount risk helper for compact seller workflow copy.
 
 - `fulfillment_delay_label` adds a tested fulfillment delay helper for compact seller workflow copy.
+
+- `payment_followup_label` adds a tested payment followup helper for compact seller workflow copy.
